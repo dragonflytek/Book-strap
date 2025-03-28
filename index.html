@@ -65,11 +65,11 @@
         <p><strong>Uncommon:</strong> 25% - 5 RNG Coins</p>
         <p><strong>Rare:</strong> 15% - 10 RNG Coins</p>
         <p><strong>Epic:</strong> 10% - 20 RNG Coins</p>
-        <p><strong>Legendary:</strong> 10% - 50 RNG Coins</p>
-        <p><strong>Mythical:</strong> 7% - 100 RNG Coins</p>
-        <p><strong>Divine:</strong> 5% - 200 RNG Coins</p>
-        <p><strong>Transcendent:</strong> 3% - 500 RNG Coins</p>
-        <p><strong>Celestial:</strong> 1% - 1000 RNG Coins</p>
+        <p><strong>Legendary:</strong> 7% - 50 RNG Coins</p>
+        <p><strong>Mythical:</strong> 5% - 100 RNG Coins</p>
+        <p><strong>Divine:</strong> 3% - 200 RNG Coins</p>
+        <p><strong>Transcendent:</strong> 1% - 500 RNG Coins</p>
+        <p><strong>Celestial:</strong> 0.5% - 1000 RNG Coins</p>
         <p><strong>Cosmic:</strong> 0.3% - 2000 RNG Coins</p>
         <p><strong>Astral:</strong> 0.1% - 5000 RNG Coins</p>
         <p><strong>Ethereal:</strong> 0.05% - 10000 RNG Coins</p>
@@ -90,11 +90,11 @@
             { name: "Uncommon", chance: 0.25, coins: 5, color: "green" },
             { name: "Rare", chance: 0.15, coins: 10, color: "blue" },
             { name: "Epic", chance: 0.10, coins: 20, color: "purple" },
-            { name: "Legendary", chance: 0.10, coins: 50, color: "orange" },
-            { name: "Mythical", chance: 0.07, coins: 100, color: "red" },
-            { name: "Divine", chance: 0.05, coins: 200, color: "gold" },
-            { name: "Transcendent", chance: 0.03, coins: 500, color: "cyan" },
-            { name: "Celestial", chance: 0.01, coins: 1000, color: "pink" },
+            { name: "Legendary", chance: 0.07, coins: 50, color: "orange" },
+            { name: "Mythical", chance: 0.05, coins: 100, color: "red" },
+            { name: "Divine", chance: 0.03, coins: 200, color: "gold" },
+            { name: "Transcendent", chance: 0.01, coins: 500, color: "cyan" },
+            { name: "Celestial", chance: 0.005, coins: 1000, color: "pink" },
             { name: "Cosmic", chance: 0.003, coins: 2000, color: "teal" },
             { name: "Astral", chance: 0.001, coins: 5000, color: "indigo" },
             { name: "Ethereal", chance: 0.0005, coins: 10000, color: "silver" },
@@ -111,7 +111,23 @@
             let accumulated = 0;
             let rarity = rarities[0];
             
-            for (let r of rarities) {
+            // Adjust the chances dynamically based on luck level
+            let adjustedRarities = rarities.map(rarity => {
+                return {
+                    ...rarity,
+                    chance: rarity.chance + (luckLevel * 0.01)
+                };
+            });
+
+            // Normalize chances so that the total is 1 (100%)
+            let totalChance = adjustedRarities.reduce((acc, r) => acc + r.chance, 0);
+            adjustedRarities = adjustedRarities.map(r => ({
+                ...r,
+                chance: r.chance / totalChance
+            }));
+
+            // Roll the dice based on the adjusted chances
+            for (let r of adjustedRarities) {
                 accumulated += r.chance;
                 if (rand < accumulated) {
                     rarity = r;
@@ -127,24 +143,6 @@
             updateDisplay();
         }
 
-        function buyLuckUpgrade() {
-            const upgradeCost = 1000;  // Cost for one luck upgrade
-            if (rngCoins >= upgradeCost) {
-                rngCoins -= upgradeCost;
-                luckLevel += 1;  // Increase luck level by 1 for each purchase
-                saveGameData();
-                updateDisplay();
-            } else {
-                alert("You don't have enough RNG Coins to buy a Luck Upgrade!");
-            }
-        }
-
-        function saveGameData() {
-            localStorage.setItem("rollLog", JSON.stringify(rollLog));
-            localStorage.setItem("rngCoins", rngCoins);
-            localStorage.setItem("luckLevel", luckLevel);
-        }
-
         function updateDisplay() {
             document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
             document.getElementById("luck-level").innerText = `Luck Level: ${luckLevel}`;
@@ -155,10 +153,26 @@
             }
         }
 
-        function loadGameData() {
-            updateDisplay();
+        function saveGameData() {
+            localStorage.setItem("rngCoins", rngCoins);
+            localStorage.setItem("luckLevel", luckLevel);
+            localStorage.setItem("rollLog", JSON.stringify(rollLog));
         }
+
+        function buyLuckUpgrade() {
+            if (rngCoins >= 1000) {
+                rngCoins -= 1000;
+                luckLevel += 1;
+                saveGameData();
+                updateDisplay();
+            } else {
+                alert("Not enough RNG Coins!");
+            }
+        }
+
+        window.onload = updateDisplay;
     </script>
 </body>
 </html>
+
 
