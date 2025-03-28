@@ -131,6 +131,8 @@
             let newEntry = document.createElement("li");
             newEntry.innerText = `Rolled: ${rarity.name}`;
             logList.prepend(newEntry);
+
+            // Ensure the body color updates correctly
             document.body.style.backgroundColor = rarity.color;
         }
 
