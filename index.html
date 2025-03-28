@@ -43,6 +43,11 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        #last-roll {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body onload="loadGameData()">
@@ -50,6 +55,7 @@
         <h1>RNG Dice Roll Game</h1>
         <button onclick="rollDice()">Roll</button>
         <p id="coins">RNG Coins: 0</p>
+        <p id="last-roll">Last Roll: None</p>
     </div>
 
     <div id="left-container">
@@ -106,6 +112,7 @@
 
         function updateDisplay(rarity) {
             document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
+            document.getElementById("last-roll").innerText = `Last Roll: ${rarity.name}`;
             let logList = document.getElementById("log-list");
             let newEntry = document.createElement("li");
             newEntry.innerText = `Rolled: ${rarity.name}`;
@@ -125,4 +132,5 @@
     </script>
 </body>
 </html>
+
 
