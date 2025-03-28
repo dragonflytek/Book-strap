@@ -70,10 +70,17 @@
         <p><strong>Common:</strong> 50% - 1 RNG Coin</p>
         <p><strong>Uncommon:</strong> 25% - 5 RNG Coins</p>
         <p><strong>Rare:</strong> 15% - 10 RNG Coins</p>
-        <p><strong>Epic:</strong> 5% - 20 RNG Coins</p>
-        <p><strong>Legendary:</strong> 2% - 50 RNG Coins</p>
-        <p><strong>Mythical:</strong> 1.5% - 100 RNG Coins</p>
-        <p><strong>Divine:</strong> 1% - 200 RNG Coins</p>
+        <p><strong>Epic:</strong> 10% - 20 RNG Coins</p>
+        <p><strong>Legendary:</strong> 7% - 50 RNG Coins</p>
+        <p><strong>Mythical:</strong> 5% - 100 RNG Coins</p>
+        <p><strong>Divine:</strong> 3% - 200 RNG Coins</p>
+        <p><strong>Transcendent:</strong> 1% - 300 RNG Coins</p>
+        <p><strong>Celestial:</strong> 0.5% - 500 RNG Coins</p>
+        <p><strong>Cosmic:</strong> 0.3% - 700 RNG Coins</p>
+        <p><strong>Astral:</strong> 0.1% - 1000 RNG Coins</p>
+        <p><strong>Ethereal:</strong> 0.05% - 1500 RNG Coins</p>
+        <p><strong>Omnipotent:</strong> 0.02% - 2000 RNG Coins</p>
+        <p><strong>Beyond Reality:</strong> 0.001% - 5000 RNG Coins</p>
     </div>
 
     <script>
@@ -81,10 +88,17 @@
             { name: "Common", chance: 0.50, coins: 1, color: "gray" },
             { name: "Uncommon", chance: 0.25, coins: 5, color: "green" },
             { name: "Rare", chance: 0.15, coins: 10, color: "blue" },
-            { name: "Epic", chance: 0.05, coins: 20, color: "purple" },
-            { name: "Legendary", chance: 0.02, coins: 50, color: "orange" },
-            { name: "Mythical", chance: 0.015, coins: 100, color: "red" },
-            { name: "Divine", chance: 0.01, coins: 200, color: "gold" }
+            { name: "Epic", chance: 0.10, coins: 20, color: "purple" },
+            { name: "Legendary", chance: 0.07, coins: 50, color: "orange" },
+            { name: "Mythical", chance: 0.05, coins: 100, color: "red" },
+            { name: "Divine", chance: 0.03, coins: 200, color: "gold" },
+            { name: "Transcendent", chance: 0.01, coins: 300, color: "cyan" },
+            { name: "Celestial", chance: 0.005, coins: 500, color: "pink" },
+            { name: "Cosmic", chance: 0.003, coins: 700, color: "silver" },
+            { name: "Astral", chance: 0.001, coins: 1000, color: "indigo" },
+            { name: "Ethereal", chance: 0.0005, coins: 1500, color: "violet" },
+            { name: "Omnipotent", chance: 0.0002, coins: 2000, color: "white" },
+            { name: "Beyond Reality", chance: 0.00001, coins: 5000, color: "black" }
         ];
 
         let rollLog = JSON.parse(localStorage.getItem("rollLog")) || [];
