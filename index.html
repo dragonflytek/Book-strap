@@ -68,20 +68,6 @@
         <p><strong>Legendary:</strong> 2% - 50 RNG Coins</p>
         <p><strong>Mythical:</strong> 1.5% - 100 RNG Coins</p>
         <p><strong>Divine:</strong> 1% - 200 RNG Coins</p>
-        <p><strong>Transcendent:</strong> 0.5% - 500 RNG Coins</p>
-        <p><strong>Celestial:</strong> 0.25% - 1000 RNG Coins</p>
-        <p><strong>Cosmic:</strong> 0.1% - 2000 RNG Coins</p>
-        <p><strong>Astral:</strong> 0.05% - 5000 RNG Coins</p>
-        <p><strong>Ethereal:</strong> 0.02% - 10000 RNG Coins</p>
-        <p><strong>Omnipotent:</strong> 0.01% - 25000 RNG Coins</p>
-        <p><strong>Beyond Reality:</strong> 0.005% - 100000 RNG Coins</p>
-    </div>
-
-    <div id="shop-container">
-        <h2>Shop</h2>
-        <p>Upgrade your luck to increase rare drop chances!</p>
-        <button onclick="buyLuckUpgrade()">Buy Luck Upgrade (1000 RNG Coins)</button>
-        <p id="luck-level">Luck Level: 0</p>
     </div>
 
     <script>
@@ -92,42 +78,18 @@
             { name: "Epic", chance: 0.05, coins: 20, color: "purple" },
             { name: "Legendary", chance: 0.02, coins: 50, color: "orange" },
             { name: "Mythical", chance: 0.015, coins: 100, color: "red" },
-            { name: "Divine", chance: 0.01, coins: 200, color: "gold" },
-            { name: "Transcendent", chance: 0.005, coins: 500, color: "cyan" },
-            { name: "Celestial", chance: 0.0025, coins: 1000, color: "pink" },
-            { name: "Cosmic", chance: 0.001, coins: 2000, color: "teal" },
-            { name: "Astral", chance: 0.0005, coins: 5000, color: "indigo" },
-            { name: "Ethereal", chance: 0.0002, coins: 10000, color: "silver" },
-            { name: "Omnipotent", chance: 0.0001, coins: 25000, color: "white" },
-            { name: "Beyond Reality", chance: 0.00005, coins: 100000, color: "black" }
+            { name: "Divine", chance: 0.01, coins: 200, color: "gold" }
         ];
 
-        let rollLog = JSON.parse(localStorage.getItem("rollLog")) || {};
+        let rollLog = JSON.parse(localStorage.getItem("rollLog")) || [];
         let rngCoins = parseInt(localStorage.getItem("rngCoins")) || 0;
-        let luckLevel = parseInt(localStorage.getItem("luckLevel")) || 0;
 
         function rollDice() {
             let rand = Math.random();
             let accumulated = 0;
             let rarity = rarities[0];
             
-            // Adjust the chances dynamically based on luck level
-            let adjustedRarities = rarities.map(rarity => {
-                return {
-                    ...rarity,
-                    chance: rarity.chance + (luckLevel * 0.01)
-                };
-            });
-
-            // Normalize chances so that the total is 1 (100%)
-            let totalChance = adjustedRarities.reduce((acc, r) => acc + r.chance, 0);
-            adjustedRarities = adjustedRarities.map(r => ({
-                ...r,
-                chance: r.chance / totalChance
-            }));
-
-            // Roll the dice based on the adjusted chances
-            for (let r of adjustedRarities) {
+            for (let r of rarities) {
                 accumulated += r.chance;
                 if (rand < accumulated) {
                     rarity = r;
@@ -135,42 +97,32 @@
                 }
             }
 
-            rollLog[rarity.name] = (rollLog[rarity.name] || 0) + 1;
             rngCoins += rarity.coins;
-            document.body.style.backgroundColor = rarity.color;
-
-            saveGameData();
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
-            document.getElementById("luck-level").innerText = `Luck Level: ${luckLevel}`;
-            let logList = document.getElementById("log-list");
-            logList.innerHTML = "";
-            for (let rarity in rollLog) {
-                logList.innerHTML += `<li>${rarity}: ${rollLog[rarity]}</li>`;
-            }
-        }
-
-        function saveGameData() {
-            localStorage.setItem("rngCoins", rngCoins);
-            localStorage.setItem("luckLevel", luckLevel);
+            rollLog.push(rarity.name);
             localStorage.setItem("rollLog", JSON.stringify(rollLog));
+            localStorage.setItem("rngCoins", rngCoins);
+            updateDisplay(rarity);
         }
 
-        function buyLuckUpgrade() {
-            if (rngCoins >= 1000) {
-                rngCoins -= 1000;
-                luckLevel += 1;
-                saveGameData();
-                updateDisplay();
-            } else {
-                alert("Not enough RNG Coins!");
-            }
+        function updateDisplay(rarity) {
+            document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
+            let logList = document.getElementById("log-list");
+            let newEntry = document.createElement("li");
+            newEntry.innerText = `Rolled: ${rarity.name}`;
+            logList.prepend(newEntry);
+            document.body.style.backgroundColor = rarity.color;
         }
 
-        window.onload = updateDisplay;
+        window.onload = function () {
+            document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
+            let logList = document.getElementById("log-list");
+            rollLog.forEach(entry => {
+                let newEntry = document.createElement("li");
+                newEntry.innerText = `Rolled: ${entry}`;
+                logList.prepend(newEntry);
+            });
+        };
     </script>
 </body>
 </html>
+
