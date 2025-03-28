@@ -1,85 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNG Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: background-color 1s ease;
+        }
+        #header {
+            text-align: center;
+            width: 100%;
+        }
+        #left-container, #right-container {
+            width: 45%;
+        }
+        #log-container {
+            border: 2px solid black;
+            padding: 10px;
+            background-color: lightgray;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        #shop-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid black;
+            background-color: lightyellow;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #coins {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
-
-<body>
-
-    <div class="container">
-
-        <section id="app">
-            <h1>Apps</h1>
-            <div class="line"></div>
-            <iframe width="400" height="620" style="border: 0px;" src="https://studio.code.org/projects/applab/TnYBodnn3x0rNhYb4J9J-hZPjzgOqIRDG7vkSP2WJCI/embed"></iframe>
-            <iframe width="400" height="620" style="border: 0px;" src="https://studio.code.org/projects/applab/bpWFoLtwz3JGl9i2jM7xajXQLN8pCbMEekad-4FAscI/embed"></iframe>
-        </section>
-
-
-
-        <h2>Click On The Games To Explore</h2>
-
-        <h5>This games are bulid in game lab, click on the game to play</h5>
-
-        <div id="myCarousel" class="carousel slide">
-            <center>
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <a href="https://studio.code.org/projects/gamelab/Sdt_OgR8VajkwZ9t45UeVtzMLGiyqhNFJexB9eCe480" target="_blank">
-                            <img src="game1.png">
-                        </a>
-                        <p>Car Racing</p>
-                    </div>
-
-                    <div class="item">
-                        <a href="https://studio.code.org/projects/gamelab/N25kriFEAiBTZwfbYpDjc_qryNjSBhYW-3fOuYRt_SI" target="_blank">
-                            <img src="game2.png">
-                        </a>
-                        <p>Be in space</p>
-                    </div>
-                    
-                      <div class="item">
-                        <a href="https://studio.code.org/projects/playlab/Xoq31TZJRl0W9K95JthlADu6tbI1xGTsVHpOvYsNtuE" target="_blank">
-                            <!--add the source of the image as "game3.PNG"-->
-                            <img src="game3.PNG">
-                        </a>
-                        <p>Bird hunting for pie</p>
-                    </div>
-                    
-                    <div class="item">
-                        <!--Add
-                        "https://studio.code.org/projects/playlab/WzncdAxXTuhs9JIxkX2v6qScTqL5bBzoUdfsqrxF4fI"
-                         in href part  -->
-                        <a href="https://studio.code.org/projects/playlab/WzncdAxXTuhs9JIxkX2v6qScTqL5bBzoUdfsqrxF4fI" target="_blank">
-                           <img src="game4.PNG">
-                        </a>
-                        <p>Password Checker</p>
-                    </div>
-
-                </div>
-
-                <!-- Left and right controls -->
-                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                
-                <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                    <!--provide class "glyphicon glyphicon-chevron-right" for the span tag below-->
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
-
-            </center>
-        </div>
-
+<body onload="loadGameData()">
+    <div id="header">
+        <h1>RNG Dice Roll Game</h1>
+        <button onclick="rollDice()">Roll</button>
+        <p id="coins">RNG Coins: 0</p>
     </div>
 
-</body>
+    <div id="left-container">
+        <div id="log-container">
+            <p><strong>Roll Log:</strong></p>
+            <ul id="log-list"></ul>
+        </div>
+    </div>
 
+    <div id="right-container">
+        <h2>Rarities and Chances:</h2>
+        <p><strong>Common:</strong> 50% - 1 RNG Coin</p>
+        <p><strong>Uncommon:</strong> 25% - 5 RNG Coins</p>
+        <p><strong>Rare:</strong> 15% - 10 RNG Coins</p>
+        <p><strong>Epic:</strong> 10% - 20 RNG Coins</p>
+        <p><strong>Legendary:</strong> 10% - 50 RNG Coins</p>
+        <p><strong>Mythical:</strong> 7% - 100 RNG Coins</p>
+        <p><strong>Divine:</strong> 5% - 200 RNG Coins</p>
+        <p><strong>Transcendent:</strong> 3% - 500 RNG Coins</p>
+        <p><strong>Celestial:</strong> 1% - 1000 RNG Coins</p>
+        <p><strong>Cosmic:</strong> 0.3% - 2000 RNG Coins</p>
+        <p><strong>Astral:</strong> 0.1% - 5000 RNG Coins</p>
+        <p><strong>Ethereal:</strong> 0.05% - 10000 RNG Coins</p>
+        <p><strong>Omnipotent:</strong> 0.02% - 25000 RNG Coins</p>
+        <p><strong>Beyond Reality:</strong> 0.001% - 100000 RNG Coins</p>
+    </div>
+
+    <div id="shop-container">
+        <h2>Shop</h2>
+        <p>Upgrade your luck to increase rare drop chances!</p>
+        <button onclick="buyLuckUpgrade()">Buy Luck Upgrade (1000 RNG Coins)</button>
+        <p id="luck-level">Luck Level: 0</p>
+    </div>
+
+    <script>
+        let rarities = [
+            { name: "Common", chance: 0.50, coins: 1, color: "gray" },
+            { name: "Uncommon", chance: 0.25, coins: 5, color: "green" },
+            { name: "Rare", chance: 0.15, coins: 10, color: "blue" },
+            { name: "Epic", chance: 0.10, coins: 20, color: "purple" },
+            { name: "Legendary", chance: 0.10, coins: 50, color: "orange" },
+            { name: "Mythical", chance: 0.07, coins: 100, color: "red" },
+            { name: "Divine", chance: 0.05, coins: 200, color: "gold" },
+            { name: "Transcendent", chance: 0.03, coins: 500, color: "cyan" },
+            { name: "Celestial", chance: 0.01, coins: 1000, color: "pink" },
+            { name: "Cosmic", chance: 0.003, coins: 2000, color: "teal" },
+            { name: "Astral", chance: 0.001, coins: 5000, color: "indigo" },
+            { name: "Ethereal", chance: 0.0005, coins: 10000, color: "silver" },
+            { name: "Omnipotent", chance: 0.0002, coins: 25000, color: "white" },
+            { name: "Beyond Reality", chance: 0.00001, coins: 100000, color: "black" }
+        ];
+
+        let rollLog = JSON.parse(localStorage.getItem("rollLog")) || {};
+        let rngCoins = parseInt(localStorage.getItem("rngCoins")) || 0;
+        let luckLevel = parseInt(localStorage.getItem("luckLevel")) || 0;
+
+        function rollDice() {
+            let rand = Math.random();
+            let accumulated = 0;
+            let rarity = rarities[0];
+            
+            for (let r of rarities) {
+                accumulated += r.chance;
+                if (rand < accumulated) {
+                    rarity = r;
+                    break;
+                }
+            }
+
+            rollLog[rarity.name] = (rollLog[rarity.name] || 0) + 1;
+            rngCoins += rarity.coins;
+            document.body.style.backgroundColor = rarity.color;
+
+            saveGameData();
+            updateDisplay();
+        }
+
+        function buyLuckUpgrade() {
+            const upgradeCost = 1000;  // Cost for one luck upgrade
+            if (rngCoins >= upgradeCost) {
+                rngCoins -= upgradeCost;
+                luckLevel += 1;  // Increase luck level by 1 for each purchase
+                saveGameData();
+                updateDisplay();
+            } else {
+                alert("You don't have enough RNG Coins to buy a Luck Upgrade!");
+            }
+        }
+
+        function saveGameData() {
+            localStorage.setItem("rollLog", JSON.stringify(rollLog));
+            localStorage.setItem("rngCoins", rngCoins);
+            localStorage.setItem("luckLevel", luckLevel);
+        }
+
+        function updateDisplay() {
+            document.getElementById("coins").innerText = `RNG Coins: ${rngCoins}`;
+            document.getElementById("luck-level").innerText = `Luck Level: ${luckLevel}`;
+            let logList = document.getElementById("log-list");
+            logList.innerHTML = "";
+            for (let rarity in rollLog) {
+                logList.innerHTML += `<li>${rarity}: ${rollLog[rarity]}</li>`;
+            }
+        }
+
+        function loadGameData() {
+            updateDisplay();
+        }
+    </script>
+</body>
 </html>
+
